@@ -1,0 +1,22 @@
+Group Name
+----------
+CSE24 H.File 360 Group
+
+
+Members
+--------
+
+Blue Jasper - BlueJasper
+Roma Alimchadani - romaalimchandani
+Jonathan Lam - jlam117
+Jesus De La Cruz - JDLC1508
+
+Designated Submitter
+--------------------
+
+Jonathan Lam
+
+Github Repo Link
+-------------------
+
+https://github.com/jlam117/cse24-project.git
