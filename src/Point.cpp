@@ -68,3 +68,10 @@ void Point::setColor(float r, float g, float b) {
     this->g = g;
     this->b = b;
 }
+void Point::moveBy(float dx, float dy) {
+    x +=dx;
+    y +=dy;
+}
+void Point::resize(float sizeFactor) {
+    size = static_cast<int>(size * sizeFactor);
+}
