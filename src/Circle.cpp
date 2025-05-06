@@ -20,6 +20,14 @@ Circle::Circle(float x, float y, float r, float g, float b) {
     this->g = g; 
     this->b = b; 
 }
+ 
+void Circle::resize(float sizeFactor) {
+     this->radius *= sizeFactor;
+     
+     if (radius < 0.05) {
+         radius = 0.05;
+    }
+}
 
 void Circle::draw() {
     glColor3f(r, g, b);
@@ -35,14 +43,16 @@ void Circle::draw() {
 bool Circle::contains(float mx, float my) {
     float dx = mx - x;
     float dy = my - y;
-    if ((dx * dx + dy * dy) <= (radius * radius)) {
-        return true;
-    }
-    return false;
+    return sqrt(dx*dx + dy*dy) <= radius;
 }
 
 void Circle::setColor(float r, float g, float b) {
     this->r = r;
     this->g = g;
     this->b = b;
+}
+
+void Circle::moveBy(float dx, float dy) {
+    x += dx;
+    y += dy;
 }
