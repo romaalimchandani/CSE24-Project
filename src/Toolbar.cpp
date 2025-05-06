@@ -1,4 +1,8 @@
 #include "Toolbar.h"
+#include "Enums.h"
+#include <FL/Enumerations.H>
+#include <bobcat_ui/bobcat_ui.h>
+#include <bobcat_ui/image.h>
 using namespace bobcat;
 
 void Toolbar::deselectAllTools() {
@@ -8,6 +12,10 @@ void Toolbar::deselectAllTools() {
     triangleButton->color(FL_BACKGROUND_COLOR);
     rectangleButton->color(FL_BACKGROUND_COLOR);
     polygonButton->color(FL_BACKGROUND_COLOR);
+    bringToFrontButton->color(FL_BACKGROUND_COLOR);
+    sendToBackButton->color(FL_BACKGROUND_COLOR);
+    plusButton->color(FL_BACKGROUND_COLOR);
+    minusButton->color(FL_BACKGROUND_COLOR);
     mouseButton->color(FL_BACKGROUND_COLOR);
 }
 
@@ -30,8 +38,20 @@ void Toolbar::visualizeSelectedTool() {
     else if (tool == POLYGON) {
         polygonButton->color(FL_WHITE);
     }
+    else if (action == PLUS) {
+        plusButton->color(FL_WHITE);
+    }
+    else if ( action == MINUS) {
+        minusButton->color(FL_WHITE);
+    }
     else if (tool == MOUSE) {
         mouseButton->color(FL_WHITE);
+    }
+    else if (action == BRING_TO_FRONT) {
+        bringToFrontButton->color(FL_WHITE);
+    }
+    else if (action == SEND_TO_BACK) {
+        sendToBackButton->color(FL_WHITE);
     }
 }
 
@@ -61,7 +81,21 @@ void Toolbar::onClick(bobcat::Widget* sender) {
     else if (sender == clearButton) {
         action = CLEAR;
     }
+    else if (sender == bringToFrontButton) {
+        action = BRING_TO_FRONT;
+    }
+    else if (sender==sendToBackButton) {
+        action = SEND_TO_BACK;
+    }
     else if (sender == mouseButton) {
+        tool = MOUSE;
+    }
+    else if (sender == plusButton) {
+        action = PLUS;
+        tool = MOUSE;
+    }
+    else if (sender == minusButton) {
+        action = MINUS;
         tool = MOUSE;
     }
 
@@ -72,6 +106,11 @@ void Toolbar::onClick(bobcat::Widget* sender) {
     visualizeSelectedTool();
     redraw();
 }
+
+void Toolbar::clearAction() {
+    action = NONE;
+}
+
 
 TOOL Toolbar::getTool() const {
     return tool;
@@ -88,8 +127,13 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     triangleButton = new Image(x, y + 150, 50, 50, "./assets/triangle.png");
     rectangleButton = new Image(x, y + 200, 50, 50, "./assets/rectangle.png");
     polygonButton = new Image(x, y + 250, 50, 50, "./assets/polygon.png");
-    clearButton = new Image(x, y + 300, 50, 50, "./assets/clear.png");
-    mouseButton = new Image(x, y + 350, 50, 50, "./assets/mouse.png");
+    clearButton = new Image(x, y + 350, 50, 50, "./assets/clear.png");
+    bringToFrontButton = new Image(x+50, y + 100, 50, 50, "./assets/bring-to-front.png");
+    sendToBackButton = new Image(x+50, y + 150, 50, 50, "./assets/send-to-back.png");
+    plusButton = new Image(x+50, y, 50, 50, "./assets/plus.png");
+    minusButton = new Image(x+50, y + 50, 50, 50, "./assets/minus.png");
+    mouseButton = new Image(x, y + 300, 50, 50, "./assets/mouse.png");
+    
 
     tool = PENCIL;
     action = NONE;
@@ -101,7 +145,11 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     rectangleButton->box(FL_BORDER_BOX);
     polygonButton->box(FL_BORDER_BOX);
     clearButton->box(FL_BORDER_BOX);
+    bringToFrontButton->box(FL_BORDER_BOX);
+    sendToBackButton->box(FL_BORDER_BOX);
     mouseButton->box(FL_BORDER_BOX);
+    plusButton->box(FL_BORDER_BOX);
+    minusButton->box(FL_BORDER_BOX);
 
     visualizeSelectedTool();
 
@@ -112,5 +160,9 @@ Toolbar::Toolbar(int x, int y, int w, int h) : Group(x, y, w, h) {
     ON_CLICK(rectangleButton, Toolbar::onClick);
     ON_CLICK(polygonButton, Toolbar::onClick);
     ON_CLICK(clearButton, Toolbar::onClick);
+    ON_CLICK(bringToFrontButton, Toolbar::onClick);
+    ON_CLICK(sendToBackButton, Toolbar::onClick);
     ON_CLICK(mouseButton, Toolbar::onClick);
+    ON_CLICK(plusButton, Toolbar::onClick);
+    ON_CLICK(minusButton, Toolbar::onClick);
 }
