@@ -7,12 +7,17 @@
 class Toolbar : public bobcat::Group {
     bobcat::Image* pencilButton;
     bobcat::Image* eraserButton;
-    bobcat::Image* rectangleButton;
     bobcat::Image* circleButton;
     bobcat::Image* triangleButton;
+    bobcat::Image* rectangleButton;
     bobcat::Image* polygonButton;
     bobcat::Image* clearButton;
+    bobcat::Image* bringToFrontButton;
+    bobcat::Image* sendToBackButton;
     bobcat::Image* mouseButton;
+    bobcat::Image* plusButton;
+    bobcat::Image* minusButton;
+
 
     TOOL tool;
     ACTION action;
@@ -25,6 +30,7 @@ public:
 
     TOOL getTool() const;
     ACTION getAction() const;
+    void clearAction();
 };
 
 #endif
