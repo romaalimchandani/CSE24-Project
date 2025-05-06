@@ -1,71 +1,79 @@
-#include "Point.h"
 #include "Canvas.h"
-#include "Circle.h"
-#include "Scribble.h"
 #include <GL/freeglut.h>
-#include <cstdlib>
+#include <algorithm>
+#include <iostream>
 
-Canvas::Canvas(int x, int y, int w, int h) : Canvas_(x, y, w, h) {
-    //
+Canvas::Canvas(int x, int y, int w, int h) : Canvas_(x, y, w, h) {}
+
+void Canvas::addShape(Shape* shape) {
+    objects.push_back(shape);
 }
 
 void Canvas::addPoint(float x, float y, float r, float g, float b, int size) {
-    shapes.push_back(new Point(x, y, r, g, b, size));
+    // If you're still supporting point tool, you can wrap it as a Shape
+    objects.push_back(new Point(x, y, r, g, b, size));
 }
 
 void Canvas::addRectangle(float x, float y, float r, float g, float b) {
-    shapes.push_back(new Rectangle(x, y, r, g, b));
+    objects.push_back(new Rectangle(x, y, r, g, b));
 }
 
 void Canvas::addCircle(float x, float y, float r, float g, float b) {
-    shapes.push_back(new Circle(x, y, r, g, b));
+    objects.push_back(new Circle(x, y, r, g, b));
 }
 
 void Canvas::addTriangle(float x, float y, float r, float g, float b) {
-    shapes.push_back(new Triangle(x, y, 0.4, 0.4, r, g, b));
+    objects.push_back(new Triangle(x, y, 0.4f, 0.4f, r, g, b));
 }
 
 void Canvas::addPolygon(float x, float y, float r, float g, float b) {
-    shapes.push_back(new Polygon(x, y, 5, 0.2f, r, g, b));
+    objects.push_back(new Polygon(x, y, 5, 0.2f, r, g, b));
+}
+
+const std::vector<Shape*>& Canvas::getShapes() const {
+    return objects;
 }
 
 void Canvas::clear() {
-    for (unsigned int i = 0 ; i < points.size(); i++) {
-        delete points[i];
+    for (Shape* s : objects) {
+        delete s;
     }
-    points.clear();
-
-    for (unsigned int i = 0 ; i < shapes.size(); i++) {
-        delete shapes[i];
-    }
-    shapes.clear();
+    objects.clear();
 }
 
 void Canvas::render() {
-    for (unsigned int i = 0 ; i < points.size(); i++) {
-        points[i]->draw();
-    }
-
-    for (unsigned int i = 0 ; i < shapes.size(); i++) {
-        shapes[i]->draw();
+    for (Shape* s : objects) {
+        s->draw();
     }
 }
 
-
-Shape* Canvas::getSelectedShape(float mx, float my) {
-    Shape* selectedShape = nullptr;
-
-    for (unsigned int i = 0; i < shapes.size(); i++) {
-        if (shapes[i]->contains(mx, my)) {
-            std::cout << "Clicked on shape[" << i << "]" << std::endl;
-            selectedShape = shapes[i];
+void Canvas::bringToFront() {
+    for (unsigned int i = 0; i < objects.size(); ++i) {
+        if (objects[i]->contains(lastClickX, lastClickY)) {
+            Shape* s = objects[i];
+            objects.erase(objects.begin() + i);
+            objects.push_back(s);
             break;
         }
     }
+}
 
-    if (selectedShape == nullptr) {
-        std::cout << "No selected shape" << std::endl;
+void Canvas::sendToBack() {
+    for (unsigned int i = 0; i < objects.size(); ++i) {
+        if (objects[i]->contains(lastClickX, lastClickY)) {
+            Shape* s = objects[i];
+            objects.erase(objects.begin() + i);
+            objects.insert(objects.begin(), s);
+            break;
+        }
     }
+}
 
-    return selectedShape;
+Shape* Canvas::getSelectedShape(float mx, float my) {
+    for (auto it = objects.rbegin(); it != objects.rend(); ++it) {
+        if ((*it)->contains(mx, my)) {
+            return *it;
+        }
+    }
+    return nullptr;
 }
