@@ -13,6 +13,10 @@ public:
 
     virtual void setColor(float r, float g, float b) = 0;
 
+    virtual void moveBy(float dx, float dy) =0;
+
+    virtual void resize(float size) = 0;
+
     virtual ~Shape(){}
     
 };
