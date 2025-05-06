@@ -37,7 +37,7 @@ void ColorSelector::visualizeSelectedColor() {
 
 void ColorSelector::onClick(bobcat::Widget* sender) {
     deselectAllColors();
-
+    
     if (sender == redButton) {
         color = RED;
     }
