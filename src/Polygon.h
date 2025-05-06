@@ -18,6 +18,8 @@ public:
     void draw();
     bool contains(float mx, float my);
     void setColor(float r, float g, float b);
+    void moveBy(float dx, float dy);
+    void resize(float size);
 
     friend struct AppTest;
 };
