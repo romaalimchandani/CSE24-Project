@@ -44,3 +44,20 @@ void Rectangle::setColor(float r, float g, float b) {
     this->g = g;
     this->b = b;
 }
+
+void Rectangle::moveBy(float dx, float dy) {
+    x += dx;
+    y += dy;
+}
+
+void Rectangle::resize(float sizeFactor) {
+    this->width *= sizeFactor;
+    this->height *= sizeFactor;
+
+    if (width < 0.05) {
+        width = 0.05;
+    }
+    if (height < 0.05) {
+        height = 0.05;
+    }
+}
