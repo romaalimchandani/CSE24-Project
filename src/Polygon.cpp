@@ -54,3 +54,16 @@ void Polygon::setColor(float r, float g, float b) {
     this->g = g;
     this->b = b;
 }
+
+void Polygon::moveBy(float dx, float dy) {
+    x += dx;
+    y += dy;
+}
+
+void Polygon::resize(float size) {
+     this->length *= size;
+     
+     if (length < 0.05) {
+         length = 0.05;
+     }
+ }
